@@ -12,13 +12,17 @@ class Ts300Spider(scrapy.Spider):
     ]
 
     def parse(self, response):
+        links = []
         for element in response.xpath("//*[@class='guwencont2']/a"):
-            item = Ts300Item()
-            authortitle = element.xpath("text()").extract()[0]
-            try:
-                item['author'] = authortitle.split("(")[1].split(")")[0]
-            except:
-                continue
-            item['title'] = authortitle.split("(")[0]
-            item['link'] = element.xpath("@href").extract()[0]
-            yield item
+            links.append(element.xpath("@href").extract()[0])
+            
+        for poem_url in links:
+            yield scrapy.Request("http://www.gushiwen.org"+poem_url, self.parse_poem)
+
+    def parse_poem(self, response): 
+        item = Ts300Item()
+        item['author'] = response.xpath("/html/body/div[3]/div[3]/div[2]/div[1]/div[1]/a/strong/text()").extract()[0]
+        item['title'] = response.xpath("/html/body/div[3]/div[3]/div[2]/div[2]/div[1]/h1/text()").extract()[0]
+        item['poem'] = response.xpath("/html/body/div[3]/div[3]/div[2]/div[2]/div[2]/p[1]").extract()[0]
+        yield item
+         

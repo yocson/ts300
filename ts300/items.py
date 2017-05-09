@@ -13,4 +13,5 @@ class Ts300Item(scrapy.Item):
     # name = scrapy.Field()
     author = scrapy.Field()
     title = scrapy.Field()
-    link = scrapy.Field()
+    #link = scrapy.Field()
+    poem = scrapy.Field()

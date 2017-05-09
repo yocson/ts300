@@ -8,6 +8,7 @@ import json
 import codecs
 from os import path
 from scrapy import signals
+import re
 
 class Ts300Pipeline(object):
     def __init__(self):
@@ -15,6 +16,9 @@ class Ts300Pipeline(object):
 
     def process_item(self, item, spider):
         self.file.write(item['author']+'/')
-        self.file.write(item['title'])
-        self.file.write(item['link']+'\n')
+        self.file.write(item['title']+'/')
+        temp = item['poem']
+        poem = re.sub("[\x00-\xff]", "".decode("utf8"), temp)
+        self.file.write(poem+'\n')
+        #self.file.write(item['link']+'\n')
         return item
