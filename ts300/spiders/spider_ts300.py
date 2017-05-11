@@ -23,6 +23,12 @@ class Ts300Spider(scrapy.Spider):
         item = Ts300Item()
         item['author'] = response.xpath("/html/body/div[3]/div[3]/div[2]/div[1]/div[1]/a/strong/text()").extract()[0]
         item['title'] = response.xpath("/html/body/div[3]/div[3]/div[2]/div[2]/div[1]/h1/text()").extract()[0]
-        item['poem'] = response.xpath("/html/body/div[3]/div[3]/div[2]/div[2]/div[2]/p[1]").extract()[0]
+        poemstr = ''
+        poemlist= response.css("p[align='center']").extract()
+        if poemlist == []:
+            poemstr = response.xpath("/html/body/div[3]/div[3]/div[2]/div[2]/div[2]/p[1]").extract()[0]
+        else:
+            for sen in poemlist:
+                poemstr += sen
+        item['poem'] = poemstr
         yield item
-         
