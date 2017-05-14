@@ -19,6 +19,6 @@ class Ts300Pipeline(object):
         self.file.write(item['title']+'/')
         temp = item['poem']
         poem = re.sub("[\x00-\xff]", "".decode("utf8"), temp)
-        self.file.write(poem+'\n')
+        self.file.write(poem)
         #self.file.write(item['link']+'\n')
         return item
