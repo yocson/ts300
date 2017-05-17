@@ -6,8 +6,8 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import json
 import codecs
-from os import path
-from scrapy import signals
+# from os import path
+# from scrapy import signals
 import re
 
 class Ts300Pipeline(object):
@@ -22,3 +22,6 @@ class Ts300Pipeline(object):
         self.file.write(poem)
         #self.file.write(item['link']+'\n')
         return item
+
+    def spider_closed(self, spider):
+        self.file.close()
