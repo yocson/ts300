@@ -14,9 +14,18 @@ BOT_NAME = 'ts300'
 SPIDER_MODULES = ['ts300.spiders']
 NEWSPIDER_MODULE = 'ts300.spiders'
 
-ITEM_PIPELINES = [
-    'ts300.pipelines.Ts300Pipeline'
-]
+ITEM_PIPELINES = {
+    'ts300.pipelines.Ts300Pipeline' : 300,
+    'ts300.pipelines.MySQLScrapyPipeline': 500,
+}
+
+# start MySQL database configure setting
+MYSQL_HOST = '127.0.0.1'
+MYSQL_DB = 'ts300'
+MYSQL_USER = 'root'
+MYSQL_PASSWD = 'root'
+MYSQL_PORT = '3306'
+# end of MySQL database configure setting
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ts300 (+http://www.yourdomain.com)'
