@@ -28,10 +28,7 @@ class Ts300Pipeline(object):
     def spider_closed(self, spider):
         self.file.close()
 
-class MySQLScrapyPipeline(object):
-    '''保存到数据库中对应的class
-       1、在settings.py文件中配置
-       2、在自己实现的爬虫类中yield item,会自动执行'''    
+class MySQLScrapyPipeline(object): 
     def __init__(self,cnx,cur):
         self.cnx = cnx
         self.cur = cur
