@@ -12,14 +12,24 @@ class Ts300Spider(scrapy.Spider):
     ]
 
     def parse(self, response):
-        links = []
-        for element in response.xpath("//*[@class='guwencont2']/a"):
-            links.append(element.xpath("@href").extract()[0])
-        for poem_url in links[0:-2]:
-            yield scrapy.Request("http://www.gushiwen.org"+poem_url, self.parse_poem)
-
+        cat_dict = {
+            'guwencont2' :"五言绝句",
+            'guwencont21':"七言绝句",
+            'guwencont22':"五言律诗",
+            'guwencont23':"七言律诗",
+            'guwencont24':"五言古诗",
+            'guwencont25':"七言古诗",
+            'guwencont26':"乐府",
+        }
+        for element in response.xpath("//*[@class='guwencont2']/a")[0:-2]:
+            item = Ts300Item()
+            poem_url = element.xpath("@href").extract()[0]
+            cat = element.xpath("./..").extract()[0].split("\"")[1].split("\"")[0]
+            item['cat'] = cat_dict[cat].decode('utf8')
+            yield scrapy.Request("http://www.gushiwen.org"+poem_url, meta={'item': item}, callback=self.parse_poem)
+            
     def parse_poem(self, response): 
-        item = Ts300Item()
+        item = response.meta['item']
         author = response.xpath("//*[@class='titleft']/a/strong/text()").extract()
         if author == []:
             author = response.xpath("//*[@class='titleft']/span/strong/text()").extract()

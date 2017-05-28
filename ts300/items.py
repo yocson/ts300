@@ -15,3 +15,4 @@ class Ts300Item(scrapy.Item):
     title = scrapy.Field()
     #link = scrapy.Field()
     poem = scrapy.Field()
+    cat = scrapy.Field()

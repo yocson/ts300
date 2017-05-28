@@ -19,6 +19,7 @@ class Ts300Pipeline(object):
     def process_item(self, item, spider):
         self.file.write(item['author']+'/')
         self.file.write(item['title']+'/')
+        self.file.write(item['cat']+'/')
         temp = item['poem']
         poem = re.sub("[\x00-\xff]", "".decode("utf8"), temp)
         self.file.write(poem)
@@ -53,10 +54,10 @@ class MySQLScrapyPipeline(object):
     #pipeline默认调用
     def process_item(self, item, spider):
         add_poem =("INSERT INTO ts300_poem "
-                   "(author, title, poem)"
-                   "VALUES (%s, %s, %s)")
+                   "(author, title, poem, cat)"
+                   "VALUES (%s, %s, %s, %s)")
         item['poem'] = re.sub("[\x00-\xff]", "".decode("utf8"), item['poem'])
-        data_poem = (item['author'], item['title'], item['poem'])
+        data_poem = (item['author'], item['title'], item['poem'], item['cat'])
         self.cur.execute(add_poem, data_poem)
         self.cnx.commit()
         return item
